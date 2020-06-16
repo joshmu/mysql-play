@@ -40,6 +40,16 @@ con.query('SELECT * FROM authors', (err, rows) => {
   rows.forEach((row) => console.log(`${row.name} lives in ${row.city}`))
 })
 
+// CREATING
+// * commenting out so we don't keep creating more records
+/* 
+const author = { name: 'Craig Buckler', city: 'Exmouth' }
+con.query('INSERT INTO authors SET ?', author, (err, res) => {
+  if (err) throw err
+  console.log('Last insert ID:', res.insertId)
+})
+*/
+
 //////////////////////////////////
 // connection closed
 //////////////////////////////////
