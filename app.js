@@ -50,6 +50,15 @@ con.query('INSERT INTO authors SET ?', author, (err, res) => {
 })
 */
 
+// UPDATING
+// * commenting out so we don't keep creating more records
+/* 
+con.query('UPDATE authors SET city = ? Where ID = ?', ['Leipzig', 3], (err, result) => {
+  if (err) throw err
+  console.log(`Changed ${result.changedRows} row(s)`);
+})
+*/
+
 //////////////////////////////////
 // connection closed
 //////////////////////////////////
