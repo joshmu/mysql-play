@@ -104,10 +104,14 @@ con.query(
   }
 )
 // * another way to prevent is to use '?' placeholders
-con.query('SELECT * FROM authors WHERE id = ?', [userSubmittedVariable], (err, rows) => {
-  if (err) throw err
-  console.log(rows);
-})
+con.query(
+  'SELECT * FROM authors WHERE id = ?',
+  [userSubmittedVariable],
+  (err, rows) => {
+    if (err) throw err
+    console.log(rows)
+  }
+)
 
 //////////////////////////////////
 // connection closed
@@ -117,3 +121,36 @@ con.end((err) => {
   // Ensures all remaining queries are executed
   // Then sends a quit packet to the MySQL server.
 })
+
+//////////////////////////////////
+// ORM > Object Relational Mapping of the Database
+//////////////////////////////////
+const Sequelize = require('sequelize')
+const sequelize = new Sequelize(
+  'sitepoint',
+  'root',
+  process.env.MYSQL_PASSWORD,
+  {
+    host: 'localhost',
+    dialect: 'mysql',
+  }
+)
+
+const Author = sequelize.define(
+  'author',
+  {
+    name: {
+      type: Sequelize.STRING,
+    },
+    city: {
+      type: Sequelize.STRING,
+    },
+  },
+  {
+    timestamps: false,
+  }
+)
+
+Author.findAll().then((authors) =>
+  console.log('All authors:', JSON.stringify(authors, null, 4))
+)

@@ -11,7 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.13"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
