@@ -1,10 +1,15 @@
 // following instructions from:
 // https://www.sitepoint.com/using-node-mysql-javascript-client/
 
+//////////////////////////////////
+// IMPORTS
+//////////////////////////////////
 require('dotenv').config()
 const mysql = require('mysql')
 
-// setup
+//////////////////////////////////
+// SETUP
+//////////////////////////////////
 const con = mysql.createConnection({
   host: 'localhost',
   user: process.env.MYSQL_USER,
@@ -12,7 +17,9 @@ const con = mysql.createConnection({
   database: 'sitepoint',
 })
 
-// connect
+//////////////////////////////////
+// CONNECT
+//////////////////////////////////
 con.connect((err) => {
   if (err) {
     console.log('Error connecting to Db')
@@ -21,15 +28,21 @@ con.connect((err) => {
   console.log('Connection established')
 })
 
-// make a query
+//////////////////////////////////
+// QUERIES
+//////////////////////////////////
+// READING
 con.query('SELECT * FROM authors', (err, rows) => {
   if (err) throw err
 
-  console.log('Data received from Db:')
-  console.log(rows)
+  console.log('Data received from Db:\n')
+
+  rows.forEach((row) => console.log(`${row.name} lives in ${row.city}`))
 })
 
+//////////////////////////////////
 // connection closed
+//////////////////////////////////
 con.end((err) => {
   // The connection is terminated gracefully
   // Ensures all remaining queries are executed
