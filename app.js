@@ -42,7 +42,7 @@ con.query('SELECT * FROM authors', (err, rows) => {
 
 // CREATING
 // * commenting out so we don't keep creating more records
-/* 
+/*
 const author = { name: 'Craig Buckler', city: 'Exmouth' }
 con.query('INSERT INTO authors SET ?', author, (err, res) => {
   if (err) throw err
@@ -51,13 +51,21 @@ con.query('INSERT INTO authors SET ?', author, (err, res) => {
 */
 
 // UPDATING
-// * commenting out so we don't keep creating more records
-/* 
-con.query('UPDATE authors SET city = ? Where ID = ?', ['Leipzig', 3], (err, result) => {
+con.query(
+  'UPDATE authors SET city = ? Where ID = ?',
+  ['Leipzig', 3],
+  (err, result) => {
+    if (err) throw err
+    console.log(`Changed ${result.changedRows} row(s)`)
+  }
+)
+
+// DESTROY
+con.query('DELETE FROM authors WHERE id = ?', [10], (err, result) => {
   if (err) throw err
-  console.log(`Changed ${result.changedRows} row(s)`);
+  console.log(`Deleted ${result.affectedRows} row(s)`)
 })
-*/
+// * note: result.affectedRows can be used both for updates and deletes, however result.changedRows is only useful for update information
 
 //////////////////////////////////
 // connection closed
