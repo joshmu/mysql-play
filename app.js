@@ -15,6 +15,7 @@ const con = mysql.createConnection({
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
   database: 'sitepoint',
+  multipleStatements: true, // required when using procedure call with an out parameter
 })
 
 //////////////////////////////////
@@ -66,6 +67,47 @@ con.query('DELETE FROM authors WHERE id = ?', [10], (err, result) => {
   console.log(`Deleted ${result.affectedRows} row(s)`)
 })
 // * note: result.affectedRows can be used both for updates and deletes, however result.changedRows is only useful for update information
+
+// USE STORED PROCEDURE
+con.query('CALL sp_get_authors()', (err, rows) => {
+  if (err) throw err
+  console.log('Data received from Db using stored procedure:')
+  console.log(rows)
+  rows[0].forEach((row) => console.log(`${row.name} lives in ${row.city}`))
+})
+
+con.query('CALL sp_get_author_details(1)', (err, rows) => {
+  if (err) throw err
+  console.log('Data received from Db using stored procedure with arg:\n')
+  console.log(rows[0])
+})
+
+con.query(
+  "SET @author_id = 0; CALL sp_insert_author(@author_id, 'Craig Buckler', 'Exmouth'); SELECT @author_id",
+  (err, rows) => {
+    if (err) throw err
+    console.log(
+      'Data received from Db using stored procedure with arg and out parameter:\n'
+    )
+    console.log(rows)
+  }
+)
+
+// ! always escape user provided data! this will prevent SQL Injection Attacks
+const userSubmittedVariable = 3
+con.query(
+  `SELECT * FROM authors WHERE id = ${mysql.escape(userSubmittedVariable)}`,
+  (err, rows) => {
+    if (err) throw err
+    console.log('prevent SQL Attacks by using escape method:')
+    console.log(rows)
+  }
+)
+// * another way to prevent is to use '?' placeholders
+con.query('SELECT * FROM authors WHERE id = ?', [userSubmittedVariable], (err, rows) => {
+  if (err) throw err
+  console.log(rows);
+})
 
 //////////////////////////////////
 // connection closed
